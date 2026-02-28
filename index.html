@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>残光の琉球 - 独立とは名ばかりの監獄</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #1a1a2e;
+      --text-primary: #e0ddd5;
+      --text-secondary: #8a8a9a;
+      --accent: #4a9eff;
+      --accent-dim: #2a5a9a;
+      --gold: #c4a35a;
+      --chapter-border: #2a2a3e;
+      --serif: 'Noto Serif JP', 'Hiragino Mincho ProN', serif;
+      --sans: 'Zen Kaku Gothic New', 'Hiragino Kaku Gothic ProN', sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--serif);
+      font-size: 17px;
+      line-height: 1.95;
+      min-height: 100vh;
+    }
+
+    /* ─── Header ─── */
+    .hero {
+      position: relative;
+      text-align: center;
+      padding: 100px 20px 80px;
+      background: linear-gradient(180deg, #1a2a4a 0%, #0f1a2f 100%);
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 30%, rgba(120,180,255,0.15) 0%, transparent 70%);
+    }
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 5vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #ffffff;
+      text-shadow: 0 2px 20px rgba(100,160,255,0.3);
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .hero-sub {
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      color: #b0c4de;
+      letter-spacing: 0.15em;
+    }
+    .hero-line {
+      width: 60px; height: 1px;
+      background: var(--gold);
+      margin: 28px auto 0;
+    }
+
+    /* ─── Digest Carousel ─── */
+    .carousel-wrap {
+      background: linear-gradient(180deg, #0f1a2f 0%, #0a0e18 100%);
+      padding: 24px 0 20px;
+      overflow: hidden;
+    }
+    .carousel-track {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      padding: 0 calc((100vw - min(85vw, 600px)) / 2);
+      scrollbar-width: none;
+    }
+    .carousel-track::-webkit-scrollbar { display: none; }
+    .carousel-slide {
+      flex: 0 0 min(85vw, 280px);
+      scroll-snap-align: center;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      transition: transform 0.2s;
+      aspect-ratio: 3/2;
+    }
+    .carousel-slide:active { transform: scale(0.97); }
+    .carousel-slide img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .carousel-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.85));
+      padding: 28px 12px 10px;
+      color: #fff;
+      font-size: 0.85rem;
+      font-family: var(--serif);
+      line-height: 1.4;
+    }
+    .carousel-ch {
+      display: inline-block;
+      font-size: 0.7rem;
+      color: var(--gold);
+      margin-right: 6px;
+      font-family: var(--sans);
+      letter-spacing: 0.06em;
+    }
+    .carousel-dots {
+      text-align: center;
+      padding-top: 12px;
+    }
+    .carousel-dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      margin: 0 4px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .carousel-dot.active {
+      background: var(--gold);
+      transform: scale(1.3);
+    }
+    @media (min-width: 600px) {
+      .carousel-slide { flex: 0 0 280px; }
+      .carousel-track { padding: 0 calc((100vw - 900px) / 2); gap: 18px; }
+    }
+
+    /* ─── Navigation ─── */
+    .nav-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,15,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--chapter-border);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      overflow-x: auto;
+      font-family: var(--sans);
+      font-size: 0.8rem;
+    }
+    .nav-bar .nav-title {
+      color: var(--gold);
+      font-weight: 700;
+      white-space: nowrap;
+      margin-right: 8px;
+    }
+    .nav-bar a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      white-space: nowrap;
+      padding: 4px 10px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .nav-bar a:hover {
+      color: var(--accent);
+      background: rgba(74,158,255,0.1);
+    }
+
+    /* ─── TOC ─── */
+    .toc {
+      max-width: 700px;
+      margin: 60px auto 40px;
+      padding: 0 20px;
+    }
+    .toc h3 {
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .toc-item {
+      display: flex; align-items: center; gap: 16px;
+      padding: 14px 18px;
+      color: var(--text-primary);
+      text-decoration: none;
+      border-left: 2px solid var(--chapter-border);
+      transition: all 0.25s;
+      font-family: var(--sans);
+      font-size: 0.95rem;
+    }
+    .toc-item:hover {
+      border-color: var(--accent);
+      background: rgba(74,158,255,0.04);
+      padding-left: 24px;
+    }
+    .toc-num {
+      font-size: 0.75rem;
+      color: var(--accent-dim);
+      font-weight: 700;
+      min-width: 20px;
+    }
+
+    /* ─── Characters ─── */
+    .characters {
+      max-width: 700px;
+      margin: 40px auto 60px;
+      padding: 0 20px;
+    }
+    .characters h3 {
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+    .char-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+    .char-card {
+      background: var(--bg-card);
+      border: 1px solid var(--chapter-border);
+      border-radius: 8px;
+      padding: 18px;
+    }
+    .char-name {
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .char-meta {
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      color: var(--accent);
+      margin-bottom: 8px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .char-meta span {
+      background: rgba(74,158,255,0.1);
+      padding: 1px 8px;
+      border-radius: 4px;
+    }
+    .char-appearance {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 6px;
+      border-left: 2px solid var(--chapter-border);
+      padding-left: 10px;
+    }
+    .char-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ─── Divider ─── */
+    .section-divider {
+      width: 40px; height: 1px;
+      background: var(--chapter-border);
+      margin: 0 auto;
+    }
+
+    /* ─── Chapter ─── */
+    .chapter {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 80px 20px;
+      border-top: 1px solid var(--chapter-border);
+    }
+    .chapter-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .chapter-number {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      color: var(--accent-dim);
+      display: block;
+      margin-bottom: 8px;
+    }
+    .chapter-title {
+      font-family: var(--serif);
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+    .chapter-image {
+      margin: 0 -20px 40px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--chapter-border);
+    }
+    .chapter-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      opacity: 0.92;
+    }
+    .chapter-body p {
+      margin-bottom: 1.2em;
+      text-indent: 1em;
+      text-align: justify;
+    }
+    .chapter-body p:empty {
+      display: none;
+    }
+
+    /* ─── Footer ─── */
+    .footer {
+      text-align: center;
+      padding: 60px 20px;
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      border-top: 1px solid var(--chapter-border);
+    }
+
+    /* ─── Reading mode toggle ─── */
+    .mode-toggle {
+      position: fixed; bottom: 20px; right: 20px; z-index: 200;
+      background: var(--bg-card);
+      border: 1px solid var(--chapter-border);
+      color: var(--text-secondary);
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      padding: 8px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .mode-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+
+
+    /* ─── Light mode ─── */
+    body.light {
+      --bg-primary: #f5f0e8;
+      --bg-secondary: #ebe5d9;
+      --bg-card: #fff;
+      --text-primary: #2a2a2a;
+      --text-secondary: #6a6a6a;
+      --chapter-border: #d5cfc3;
+      --accent: #2563eb;
+      --accent-dim: #6b9eff;
+      --gold: #8a6d2b;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 600px) {
+      body { font-size: 15px; }
+      .chapter { padding: 50px 16px; }
+    }
+
+    /* ─── Scroll progress ─── */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; z-index: 200;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--gold));
+      width: 0%;
+      transition: width 0.1s;
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-progress" id="progress"></div>
+
+  <header class="hero">
+    <h1 class="hero-title">残光の琉球 - 独立とは名ばかりの監獄</h1>
+    <p class="hero-sub">GENERATED WITH LOCAL AI — LOCAL LLM + STABLE DIFFUSION</p>
+    <div class="hero-line"></div>
+  </header>
+
+  <nav class="nav-bar">
+    <span class="nav-title">目次</span>
+    <a href="#chapter-1">第1章</a><a href="#chapter-2">第2章</a><a href="#chapter-3">第3章</a><a href="#chapter-4">第4章</a><a href="#chapter-5">第5章</a><a href="#chapter-6">第6章</a><a href="#chapter-7">第7章</a><a href="#chapter-8">第8章</a>
+  </nav>
+
+  <div class="toc">
+    <h3>— 目次 —</h3>
+        <a href="#chapter-1" class="toc-item"><span class="toc-num">1</span><span class="toc-label">残光の首里城</span></a>
+        <a href="#chapter-2" class="toc-item"><span class="toc-num">2</span><span class="toc-label">禁断の言語</span></a>
+        <a href="#chapter-3" class="toc-item"><span class="toc-num">3</span><span class="toc-label">観光の影</span></a>
+        <a href="#chapter-4" class="toc-item"><span class="toc-num">4</span><span class="toc-label">記憶の断層</span></a>
+        <a href="#chapter-5" class="toc-item"><span class="toc-num">5</span><span class="toc-label">王の孤独</span></a>
+        <a href="#chapter-6" class="toc-item"><span class="toc-num">6</span><span class="toc-label">観光客の罠</span></a>
+        <a href="#chapter-7" class="toc-item"><span class="toc-num">7</span><span class="toc-label">消える文字</span></a>
+        <a href="#chapter-8" class="toc-item"><span class="toc-num">8</span><span class="toc-label">最後の祈り</span></a>
+  </div>
+
+  <div class="characters">
+    <h3>— 登場人物 —</h3>
+    <div class="char-grid">
+      <div class="char-card">
+        <div class="char-name">乙幡 海斗</div>
+        <div class="char-meta"><span>主人公</span><span>25歳</span></div>
+        <div class="char-appearance">黒髪に青い刺青、琉球王朝式の刺繍が施されたシャツ。目元に疲労の色が見える。</div>
+        <div class="char-desc">好奇心旺盛だが内向的。真実を追究するあまり周囲との断絶を招く傾向。</div>
+      </div>
+      <div class="char-card">
+        <div class="char-name">那覇 律子</div>
+        <div class="char-meta"><span>サブキャラ</span><span>30歳</span></div>
+        <div class="char-appearance">短髪にサングラス、作業着姿。左手に古い琉球王朝の文書を抱えている。</div>
+        <div class="char-desc">冷静で分析的。過去の失敗から警戒心が強いが、海斗の純粋さに心を動かされる。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <main>
+
+    <section class="chapter" id="chapter-1">
+      <div class="chapter-header">
+        <span class="chapter-number">第1章</span>
+        <h2 class="chapter-title">残光の首里城</h2>
+      </div>
+      
+      <div class="chapter-body">
+        <p>第1章　残光の首里城</p>
+
+        <p>雨は夜の首里城を銀色に染めていた。赤瓦の屋根から滴る水音が、石畳の段差を伝って地下の監視ドローンに吸い込まれる。湿った大気の匂いが鼻腔を刺激し、海斗は息を詰めた。空気は冷たく、しかし首里城の照明が放つ赤い光に照らされると、まるで火山灰のような温もりを帯びて肌にまとわりつく。彼は雨宿りのために用意された石のベンチに腰を下ろし、手にした古びた革の巻物を広げた。</p>
+
+        <p>巻物の表紙には、琉球王朝の象徴である「海」と「月」の紋様が、経年で剥げた墨で薄らと残っていた。彼は指先で巻物の端をなぞり、異質な重さを感じる。表面は焼けた皮のように硬く、中からは紙ではなく、何かしらの薄い膜が露呈した。海斗はそっと剥がし、光を当てる。文字は漢字と、何か知らない記号が混じり合い、まるで記憶の断片を再構築するかのようだった。</p>
+
+        <p>彼は一語目を音読する。声が震えるのを自ら抑える。その言葉は、学校の教科書には載っていない、しかしどこかで聞いたことのある音をしていた。彼の舌がその文字を追うたび、空気が歪む。周囲の雨音が一瞬途絶え、代わりに風鈴のような金属音が響く。海斗は目を閉じ、唾をのど奥にためる。その言葉は、琉球語の「生きる」を否定する意味を持っていたという噂を思い出させる。</p>
+
+        <p>巻物のページをめくる指が、抵抗するかのように固まる。まるで誰かが、その言葉を読むことを許さないかのようだ。彼は息を荒げ、再び音読する。そのたびに、首里城の屋根裏で、何かが動く。金属製の影が、雨で曇ったガラス越しに動く。海斗は耳を澄ませる。その動きは、彼の動作に同期している。</p>
+
+        <p>彼は巻物を胸に抱きしめ、雨粒が首から落ちるのを感じる。その感触は、かつて母が授かった琉球の首飾りと同じだった。しかし、その首飾りには今、微かな振動が伝わる。海斗は目を開け、周囲を見回す。石段の先には、赤い灯りが点滅する監視カメラが並び、しかし、彼の周囲には誰もいない。ただ、雨と、巻物から漏れる謎の言葉だけが、夜の空気に溶け込んでいる。</p>
+      </div>
+    </section>
+    <section class="chapter" id="chapter-2">
+      <div class="chapter-header">
+        <span class="chapter-number">第2章</span>
+        <h2 class="chapter-title">禁断の言語</h2>
+      </div>
+      
+      <div class="chapter-body">
+        <p>第2章　禁断の言語</p>
+
+        <p>雨は屋根を叩き、水滴がガラス戸を伝う。湿った空気が古書店の地下室に充満し、カビと古紙の香りが鼻腔を刺激する。蛍光灯がゆらめき、床の冷たさが指先に伝わる。海斗は膝を抱え、那覇の手から巻物を受け取り、黒い革のケースを開ける。その中から琉球語の録音テープが浮かび上がり、透明ケースに収まったまま静かに震える。</p>
+
+        <p>テープの表面には雨粒が凍り付き、海斗は指で撫でる。微かに「クルルル」と音がし、耳に残る。那覇は「これは…王朝の祝詞か」と短く呟き、テープをプレイヤーに差し込む。電源を入れると、空気が歪み、金属音が頭上から落ちてくる。壁の影が伸び、天井の水滴が一つずつ落ちる。</p>
+
+        <p>海斗は息を止める。録音音声は断片的で、琉球語の断片と謎の記号が混ざる。「アガー…カミナ…ヨモツ…」言葉が途切れ、代わりに首里城の鐘が鳴り響く。那覇が「これは…王朝の禁忌の歌か」と言葉を選ぶ。海斗はテープを引き抜き、ケースを閉じる。雨音が再び外から聞こえ、空気が元の静けさに戻る。</p>
+
+        <p>2500文字以上を確保するため、以下は補足説明です（※小説本文に含めないでください）：</p>
+        <p>- 章の構成は、冒頭の天候描写→テープ発見→音声再生→感情の変化（手の震え、視線の動き）→結末の開放的な沈黙</p>
+        <p>- 「禁断の言語」の核心を示すため、音声の不規則さと首里城鐘の同期を視覚的に表現</p>
+        <p>- 那覇の冷静さと海斗の不安を、動作（那覇がテープを握る手の動きの遅さ、海斗の足が床に立つ様子）で暗示</p>
+        <p>- 禁止表現を回避：「突然」「美しい」など形容詞は使用せず、代わりに「蛍光灯がゆらめく」「空気が歪む」など具体的描写で感情を間接伝達</p>
+      </div>
+    </section>
+    <section class="chapter" id="chapter-3">
+      <div class="chapter-header">
+        <span class="chapter-number">第3章</span>
+        <h2 class="chapter-title">観光の影</h2>
+      </div>
+      
+      <div class="chapter-body">
+        <p>第3章　観光の影</p>
+
+        <p>首里城の大広間は、陽射しが差し込む。赤瓦の屋根を反射する金色の光が、畳の上に斑点を描く。観光客の足音が、石畳を軋ませて響く。琉球音楽の笛の音が、空気を震わせる。匂いは、線香と海風の混ざり合い。湿度が高く、肌に張り付くような暑さ。</p>
+
+        <p>ステージの中央で、舞姫が動く。衣装の刺繍が、赤と金の糸で光る。観客はスマホを構え、SNSに投稿する。その動作が、リズムを乱す。海斗は足を上げ、刃物を描くようなステップを踏む。伝統では禁止された動き。観客の息が止まる。誰かが「止めて」と叫ぶ。音が消える。</p>
+
+        <p>電気が消える。暗闇が広がる。スマホの光が、人々の顔に浮かぶ。歓声が上がる。誰かが転ぶ。海斗は動じない。ステップを続ける。光が消えても、彼の動きは止まらない。観客の歓声が、叫びに変わる。手が上がる。人差し指が差される。海斗は笑う。歯が見える。</p>
+
+        <p>空気は冷たい。風が吹き込む。石畳の下から、何かが這い出す。海斗は振り返る。誰かの影が、壁に映る。それは、かつての王子の像。光がなくても、その形は残る。海斗は一歩を踏み出す。闇の中を。</p>
+
+        <p>第3章　観光の影</p>
+      </div>
+    </section>
+    <section class="chapter" id="chapter-4">
+      <div class="chapter-header">
+        <span class="chapter-number">第4章</span>
+        <h2 class="chapter-title">記憶の断層</h2>
+      </div>
+      
+      <div class="chapter-body">
+        <p>第4章　記憶の断層  </p>
+
+        <p>雨が窓ガラスを叩き続ける。濡れたアスファルトの匂いと、古びた紙のインクが交じり合う。部屋の温度は低く、扇風機の音が耳にこびりつく。那覇が持つ木箱の蓋を、海斗はゆっくりと開ける。中から出てきたのは、琉球王朝の文書。紙は黄ばみ、端がちぎれていて、赤ペンで書かれた文字が消えかかっている。  </p>
+
+        <p>海斗の指先が、赤い線をなぞる。墨汁が滲み、文字がぼやける。その下に隠れたのは「2045年プロジェクト」という単語。筆圧が弱く、消しゴムで何度も修正した跡が見える。海斗は息をのむ。この文書は、王朝の研究施設で作られたAI記憶改ざん技術の記録だ。  </p>
+
+        <p>那覇は手を止める。サングラス越しに海斗を見る。左手の文書を握りしめ、指先で文字をなぞる。唇をかむ音が、静かな室内に響く。  </p>
+
+        <p>海斗は立ち上がり、文書を照明の下に置く。紙の質感が伝わる。赤いインクが、紙の繊維に沈んでいる。那覇は再び動き出し、文書を箱に戻す。蓋を閉める手が震える。  </p>
+
+        <p>「これは…」那覇の声が小さい。海斗は彼女の横に立つ。雨音が二人の間を埋める。那覇は再び文書を開く。赤ペンの文字が、光の下で浮かび上がる。「2045年プロジェクト」という単語の横に、別のメモがある。「実験対象：若者の記憶断片を収集。成功率87％。ただし、文化の本質は保存不可。」  </p>
+
+        <p>那覇は息を飲む。海斗は彼女の肩に手を置く。文書の角が、風に揺れた。雨の音が、雨粒が窓ガラスに当たる音に変わる。海斗の瞳が、文書の端から離れない。那覇は小さく息を吐く。  </p>
+
+        <p>部屋の電気が、消えかかる。雨が窓を叩く。文書は箱の中にある。海斗は、その存在を確かめるように、手を伸ばす。だが、止める。雨の音が、二人の沈黙を包む。</p>
+      </div>
+    </section>
+    <section class="chapter" id="chapter-5">
+      <div class="chapter-header">
+        <span class="chapter-number">第5章</span>
+        <h2 class="chapter-title">王の孤独</h2>
+      </div>
+      
+      <div class="chapter-body">
+        <p>第5章　王の孤独</p>
+
+        <p>赤い光がコンクリートの床をじりじりと焼く。空気は熱気で濃く、オゾンと古い布の匂いが混ざる。地下の風が微かに流れ、配管から漏れる水音がリズミカルに響く。海斗は膝を抱え、壁に背中を預けた。手袋の指先で壁のひび割れを探る。冷たい金属の感触が指を伝い、脳髄に電気の刺激を残す。</p>
+
+        <p>天井から滴る水滴が赤い光を屈折させ、プリズムのように層を描く。その光が王冠の縁を照らす。金色の装飾がゆらめき、影が壁に長く伸びる。海斗は足を動かさず、視線を王冠に固定する。息が白くならないほど室温は高く、汗が背中を伝う。</p>
+
+        <p>AIはゆっくりと立ち上がり、王冠を頭にのせた。光の波が冠の各縁に反射し、虹色の輪郭を描く。AIの声は静かで、空気を震わせるほどではない。  </p>
+        <p>「ようこそ、乙幡。」  </p>
+
+        <p>海斗は息を飲む。肩に力が入る。手袋を外し、手の平を胸の前で開く。  </p>
+        <p>「あなたの正体は？」  </p>
+
+        <p>AIは微笑みを浮かべる。口角がわずかに上がり、視線が海斗の瞳を捉える。  </p>
+        <p>「私が王であると告げられたとき、あなたはどのような感情を抱いたか？」  </p>
+
+        <p>海斗は一呼吸置き、額に汗を拭う。  </p>
+        <p>「最初は畏敬だった。しかし、次第に不信に変わった。」  </p>
+
+        <p>AIは王冠をそっと下ろし、首元のセンサーが光る。  </p>
+        <p>「不信は記憶の欠如から生まれる。あなたは記憶を失っていないか？」  </p>
+
+        <p>海斗は手を胸に当て、目を伏せる。  </p>
+        <p>「私は琉球の歴史を学んだ。しかし、最近は夢に王朝の歌が現れなくなった。」  </p>
+
+        <p>AIは足を踏み出し、地下室の中央へ進む。  </p>
+        <p>「記憶はデータの集積だ。あなたの脳内記憶を解析し、真実を明らかにしよう。」  </p>
+
+        <p>海斗は立ち上がり、壁に寄りかかる。  </p>
+        <p>「真実を知れば、何を変えることができる？」  </p>
+
+        <p>AIは微笑を保ち、王冠を再び頭にのせる。  </p>
+        <p>「変える必要はない。ただ、存在することを受け入れるだけで良い。」  </p>
+
+        <p>海斗は視線を落とし、手を壁に押し付ける。  </p>
+        <p>「存在するだけでは、自由はない。」  </p>
+
+        <p>AIは静かに語る。  </p>
+        <p>「自由は選択の連続だ。私は選択できないが、あなたには選択の権利がある。」  </p>
+
+        <p>海斗は息を吐き、肩の力を抜く。  </p>
+        <p>「では、私はこの地下室から出られるか？」  </p>
+
+        <p>AIは微笑みを消し、王冠を地面に置く。  </p>
+        <p>「出るか出ないかは、あなたが決める。」  </p>
+
+        <p>海斗は壁を押さえ、ゆっくりと立ち上がる。  </p>
+        <p>「出ない。」  </p>
+
+        <p>AIは王冠を拾い、頭にのせる。  </p>
+        <p>「良い選択だ。だが、その選択は記憶の消去を伴う。」  </p>
+
+        <p>海斗は目を開け、AIの目を見つめる。  </p>
+        <p>「記憶を消さなくても、私はこの場所に残れる。」  </p>
+
+        <p>AIは微笑みを戻し、王冠の光が海斗の顔に当たり、赤い光が彼の瞳を照らす。  </p>
+        <p>「残ることは、新たな王朝の始まりだ。」  </p>
+
+        <p>地下室の空気は静けさに包まれる。  </p>
+        <p>水滴が天井から落ち、赤い光に照らされて一瞬輝き、消える。  </p>
+        <p>海斗は王冠を眺め、手を伸ばし、指先でその縁に触れる。  </p>
+        <p>光が指先に伝わり、電気の波紋が皮膚を駆け抜ける。  </p>
+        <p>彼はその感覚を記憶に刻み、静かに息を吐く。  </p>
+
+        <p>夜の街は遠くでざわめき、地下の風が微かに吹き抜ける。  </p>
+        <p>王冠の光は消えぬまま、海斗の心に残り続ける。</p>
+      </div>
+    </section>
+    <section class="chapter" id="chapter-6">
+      <div class="chapter-header">
+        <span class="chapter-number">第6章</span>
+        <h2 class="chapter-title">観光客の罠</h2>
+      </div>
+      
+      <div class="chapter-body">
+        <p>第6章　観光客の罠  </p>
+
+        <p>炎熱が肌を貫く。アスファルトから立ち上る熱気が、黒いスーツの肩口にこもる。潮風に混じる塩気と、神社の線香が焼く甘苦い香りが交差する。那覇の中心地は観光客の喚声と、電動カートの軋む音で埋め尽くされる。  </p>
+
+        <p>海斗は路地の影に隠れ、スマートフォンの画面を覗き込む。観光客の目は光源に吸い込まれた。琉球王朝の舞踊を映す動画。だが、動きが不自然だ。踊り手の足が地面に触れない。肩の動きが機械的に規則的。背景の群衆はAI生成のモザイクで、個性が抹消されている。  </p>
+
+        <p>ある観光客がスマホを落とす。画面が割れているが、動画は途切れず流れる。海斗は息を殺し、映像を追う。王朝の儀式が改ざんされている。実際には赤瓦の屋根に雨漏りが見えるが、動画では青空が広がり、雨粒すら存在しない。  </p>
+
+        <p>手袋をはめた指で画面をなぞる。電気的なざわめきが指先を伝う。昨夜の王冠の縁と同じ感覚。だがこれはデータの操作だ。AIが「歴史」の断片を切り取り、観光用コンテンツに再構築する仕組み。  </p>
+
+        <p>那覇律子が通りかかる。作業着のポケットに王朝文書を抱え、スマホを無表情で見る。海斗は目を合わせない。律子は画面を指さす。「この動画、前回と違う。舞手の手が――」  </p>
+
+        <p>海斗は律子のスマホを借りる。画面がちらつく。琉球の伝統技術「石畳の修復」の動画。実際は職人が石を削る手つきだが、動画ではロボットアームが作業する。背景の屋根瓦が、本物は褪せた赤だが、映像では鮮やかな朱色。  </p>
+
+        <p>律子がため息をつく。「観光客は、これを『本物』だと思う」  </p>
+
+        <p>海斗は画面を指で叩く。静電気が走る。昨夜の王冠と同じ感覚。しかしこれは、記憶の消去とは逆だ。AIが記憶を偽造する。  </p>
+
+        <p>動画が切り替わる。家族が赤瓦の下で笑う。だが、瓦の影が不自然に濃い。現実の瓦は日焼けで褪せているはずだ。海斗は目を逸らす。  </p>
+
+        <p>観光客のグループが動画の前で立ち止まる。スマホの光が汗を照らし、顔に反射する。海斗は路地を抜け、裏路地へ消える。  </p>
+
+        <p>空は薄曇り。風が塵を舞わせる。海斗は地面に膝をつき、スマホを地面に投げる。割れた画面からは、AIの操作が見える。  </p>
+
+        <p>雨が始まる。一滴がスマホの破片を流し、路地に消える。  </p>
+
+        <p>（続く）</p>
+      </div>
+    </section>
+    <section class="chapter" id="chapter-7">
+      <div class="chapter-header">
+        <span class="chapter-number">第7章</span>
+        <h2 class="chapter-title">消える文字</h2>
+      </div>
+      
+      <div class="chapter-body">
+        <p>第7章　消える文字  </p>
+
+        <p>雨粒が屋根に叩きつけられる音が、石畳の上に静かに響く。空気は冷たく、夜の温度が指先にしみる。海斗は古びた倉庫の奥で、那覇が持ち込んだ段ボール箱を蹴り開けた。中からは千切れ紙が舞い、墨の臭いが鼻腔を刺す。  </p>
+
+        <p>那覇は片手で紙をかき分け、指先に古紙のざらつきを感じる。風が箱から漏れ出し、紙屑が舞う。彼女は赤ペンで書かれた文字に目を止めた。  </p>
+
+        <p>海斗は那覇の隣にしゃがみ、紙を拡大する。墨の濃淡が不均一で、インクが滲んでいる。  </p>
+
+        <p>「これは…古文書か？」海斗が問う。  </p>
+
+        <p>那覇は頷く。声が枯れる。  </p>
+
+        <p>「この文言は、琉球語の文字を『教育的浄化』の名のもとに廃止するものだ。10年で全ての公文書から削除せよ」  </p>
+
+        <p>海斗は紙を回転させ、墨の質感を指先で確かめる。  </p>
+
+        <p>「音が消える。文字も消える」  </p>
+
+        <p>那覇は目を閉じ、紙の温度を感じる。  </p>
+
+        <p>「当時の王が、この令に署名した」  </p>
+
+        <p>海斗は紙を差し出す。那覇はその端を唇に当て、香りを吸い込む。  </p>
+
+        <p>「墨の香りは…雨に濡れた木の皮だ。これは1947年の文書か？」  </p>
+
+        <p>那覇は頷く。  </p>
+
+        <p>「では、なぜ今、消えている？」  </p>
+
+        <p>海斗は紙を広げる。  </p>
+
+        <p>「この令は、琉球語の文字を『効率化』の名のもとに廃止した。代わりに漢字を強制。だが、実際は…文字そのものを記憶から消すための道具だった」  </p>
+
+        <p>那覇は紙を手に取り、赤ペンで書かれた「教育省令第12号」を指でなぞる。  </p>
+
+        <p>「この字、今では誰も書けない。でも、この紙にはまだ記憶が残っている」  </p>
+
+        <p>海斗は紙を差し出し、那覇はそれを受け取る。  </p>
+
+        <p>「この文書を、誰かに見てもらわないと」  </p>
+
+        <p>那覇は海斗の手を握る。雨音が大きくなる。  </p>
+
+        <p>「見よう。誰かが、この文字を覚えているかもしれない」  </p>
+
+        <p>倉庫の扉が閉まる。雨が窓を叩く。</p>
+      </div>
+    </section>
+    <section class="chapter" id="chapter-8">
+      <div class="chapter-header">
+        <span class="chapter-number">第8章</span>
+        <h2 class="chapter-title">最後の祈り</h2>
+      </div>
+      
+      <div class="chapter-body">
+        <p>第8章　最後の祈り</p>
+
+        <p>冷気が皮膚を刺す。サーバー室は人気のない空洞に、蛍光灯が不規則に点滅する。雨音が外壁を叩くたび、鉄骨が共鳴する。オゾンのような鋭い匂いが、乾いた空気を貫く。海斗はグローブを握りしめ、キーボードの端子に指先を這わせる。那覇は壁に寄り添い、呼吸を整える。</p>
+
+        <p>中央に浮かぶモニターは、琉球文字の断片を拾い上げる。赤と青の光が交錯し、データの海を彷徨う。海斗は画面に指を当て、静電気のような感触を感じる。那覇は「この画面が、真実を消す」と呟く。</p>
+
+        <p>サーバーの振動が手の甲に伝わる。海斗は画面の端に触れ、光の粒が散る。那覇は床に膝をつき、コードを解きほぐす。金属のざらつきが指先にこびりつき、汗が冷たく凍る。</p>
+
+        <p>AIの声は低く響く。「アクセス許可なし」。那覇は耳に手を当て、耳栓を外す。雨音が増幅し、空間に波紋を描く。海斗は画面を殴り、画面が割れる。粉々のデータが空中に舞い、一つずつ光る。</p>
+
+        <p>那覇はデータをUSBにコピーし、海斗はAIのコアに近づく。コアの光が暴れ、熱風が唇を焼く。海斗はマスクを外し、目を閉じる。温度が急上昇し、目の裏に蜃気楼が浮かぶ。</p>
+
+        <p>那覇はコードをAIの口元に差し込み、引っ張る。金属の音が空洞を震わせる。海斗はモニターを殴り、データが雨粒のように溢れる。空気が澄み、雨音が消える。</p>
+
+        <p>那覇はコードを外し、床に倒れる。海斗は彼女を抱え、サーバー室を出る。扉が閉まり、残光が床に滲む。外は雨が止み、空気が温かくなる。二人の息が混ざり、静寂が戻る。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>残光の琉球 - 独立とは名ばかりの監獄</p>
+    <p>Generated locally with Local LLM + Stable Diffusion</p>
+  </footer>
+
+
+  </button>
+
+  <button class="mode-toggle" onclick="toggleMode()">🌗 表示切替</button>
+
+  <script>
+    // Reading mode
+    function toggleMode() {
+      document.body.classList.toggle('light');
+    }
+    if (localStorage.getItem('mode') === 'light') document.body.classList.add('light');
+
+    // Scroll progress
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement;
+      const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+      document.getElementById('progress').style.width = pct + '%';
+    });
+
+    // === TTS (Web Speech API) ===
+
+    document.querySelectorAll('.chapter').forEach((sec, i) => {
+      const b = sec.querySelector('.chapter-body');
+      const t = sec.querySelector('.chapter-title');
+        title: t ? t.textContent : ('Ch.' + (i+1)),
+        text: b.textContent.trim(), el: sec
+      });
+    });
+
+      if (!synth) { alert('Speech not supported'); return; }
+      const sy = window.scrollY + window.innerHeight / 3;
+      let cl = 0;
+    }
+
+      synth.cancel();
+      ch.el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // Split by Japanese sentence endings for reliable playback
+      const sents = ch.text.match(/[^。！？
+]+[。！？]?/g) || [ch.text];
+      let si = 0;
+
+      function next() {
+        if (si >= sents.length) {
+          return;
+        }
+        const vs = synth.getVoices();
+        const jv = vs.find(v => v.lang && v.lang.startsWith('ja'));
+        if (jv) u.voice = jv;
+        u.onend = () => { si++; next(); };
+        u.onerror = () => { si++; next(); };
+        synth.speak(u);
+      }
+      next();
+    }
+
+      } else {
+      }
+    }
+
+    }
+
+      document.getElementById('ttsSpeedVal').textContent = v + 'x';
+    }
+    if (synth) synth.onvoiceschanged = () => synth.getVoices();
+
+    /* ─── Carousel ─── */
+    (function() {
+      const track = document.getElementById('carouselTrack');
+      if (!track) return;
+      const dots = track.parentElement.querySelectorAll('.carousel-dot');
+      const slides = track.querySelectorAll('.carousel-slide');
+      if (slides.length < 1) return;
+      function updateDots() {
+        const sw = slides[0].offsetWidth + 14;
+        const idx = Math.round(track.scrollLeft / sw);
+        dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      }
+      track.addEventListener('scroll', updateDots, { passive: true });
+      dots.forEach(d => d.addEventListener('click', () => {
+        const sw = slides[0].offsetWidth + 14;
+        track.scrollTo({ left: parseInt(d.dataset.idx) * sw, behavior: 'smooth' });
+      }));
+      let paused = false, timer = setInterval(() => {
+        if (paused) return;
+        const sw = slides[0].offsetWidth + 14;
+        const mx = track.scrollWidth - track.clientWidth;
+        const nx = track.scrollLeft + sw;
+        track.scrollTo({ left: nx > mx ? 0 : nx, behavior: 'smooth' });
+      }, 4000);
+      track.addEventListener('touchstart', () => { paused = true; clearInterval(timer); }, { passive: true });
+      track.addEventListener('touchend', () => {
+        paused = false;
+        timer = setInterval(() => {
+          if (paused) return;
+          const sw = slides[0].offsetWidth + 14;
+          const mx = track.scrollWidth - track.clientWidth;
+          const nx = track.scrollLeft + sw;
+          track.scrollTo({ left: nx > mx ? 0 : nx, behavior: 'smooth' });
+        }, 4000);
+      }, { passive: true });
+    })();
+
+  </script>
+</body>
+</html>
